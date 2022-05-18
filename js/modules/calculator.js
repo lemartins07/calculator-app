@@ -1,7 +1,8 @@
 export default class Calculator {
-  constructor(display, numbers) {
+  constructor(display, numbers, limit) {
     this.display = document.querySelector(display);
     this.numbers = document.querySelectorAll(numbers);
+    this.limit = limit;
 
     this.display.innerText = 0;
     this.handleClick = this.handleClick.bind(this);
@@ -10,7 +11,13 @@ export default class Calculator {
   show(number) {
     switch (number) {
       default:
-        this.display.innerText += number;
+        this.addNumberDisplay(number);
+    }
+  }
+
+  addNumberDisplay(number) {
+    if (this.display.innerText.length < this.limit) {
+      this.display.innerText += number;
     }
   }
 
