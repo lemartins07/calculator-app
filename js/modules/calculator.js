@@ -33,6 +33,7 @@ export default class Calculator {
 
   handleNumberClick(event) {
     event.preventDefault();
+    Calculator.clickEffect(event.target);
     this.show(event.target.innerText);
   }
 
@@ -40,36 +41,51 @@ export default class Calculator {
     this.numbers.forEach((number) => number.addEventListener('click', this.handleNumberClick));
   }
 
-  handleDivision() {
+  handleDivision({ target }) {
+    Calculator.clickEffect(target);
     console.log(this);
   }
 
-  handleMultiplication() {
+  handleMultiplication({ target }) {
+    Calculator.clickEffect(target);
     console.log(this);
   }
 
-  handleSubtraction() {
+  handleSubtraction({ target }) {
+    Calculator.clickEffect(target);
     console.log(this);
   }
 
-  handleSum() {
+  handleSum({ target }) {
+    Calculator.clickEffect(target);
     console.log(this);
   }
 
-  handleResult() {
+  handleResult({ target }) {
+    Calculator.clickEffect(target);
     console.log(this);
   }
 
-  handleClear() {
+  handleClear({ target }) {
+    Calculator.clickEffect(target);
     console.log(this);
   }
 
-  handleAllClear() {
+  handleAllClear({ target }) {
+    Calculator.clickEffect(target);
     this.display.innerText = 0;
   }
 
-  handlePercentage() {
+  handlePercentage({ target }) {
+    Calculator.clickEffect(target);
     console.log(this);
+  }
+
+  static clickEffect(element) {
+    element.classList.add('brightness');
+    setTimeout(() => {
+      element.classList.remove('brightness');
+    }, 50);
   }
 
   addOperationsEvents() {
