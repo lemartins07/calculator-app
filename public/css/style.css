@@ -67,3 +67,7 @@ body{
 .btn-aux {
   background: #585858;
 }
+
+.brightness {
+  filter: brightness(1.2);
+}
