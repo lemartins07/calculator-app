@@ -65,7 +65,7 @@ export default class Calculator {
   }
 
   handleAllClear() {
-    console.log(this);
+    this.display.innerText = 0;
   }
 
   handlePercentage() {
