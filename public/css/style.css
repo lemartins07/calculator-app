@@ -38,9 +38,13 @@ body{
 .body-number {
   padding:20px;
   text-align:center;
-  cursor:pointer;
+  cursor:pointer;  
 }
 
+.body-number:nth-child(17){
+  grid-column: 1/3;
+}
+/* 
 .body-number:nth-child(-n + 3) {
   background: #585858;
 }
@@ -51,5 +55,15 @@ body{
 
 .body-number:nth-child(4n) {
   background: #f3a33c;
+} */
+
+.btn-number {
+  background: #747474;
+}
+.btn-operation {
+  background: #f3a33c;
 }
 
+.btn-aux {
+  background: #585858;
+}
