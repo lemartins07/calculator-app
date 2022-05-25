@@ -4,7 +4,12 @@ export default class Calculator {
     this.numbers = document.querySelectorAll(numbers);
     this.limit = limit;
 
-    this.display.innerText = 0;
+    this.display.innerText = '0';
+
+    this.operation = '';
+    this.number1 = '';
+    this.number2 = '';
+    this.ativado = 0;
 
     this.btnDivision = document.querySelector('#btn-division');
     this.btnMultiplication = document.querySelector('#btn-multiplication');
@@ -18,22 +23,25 @@ export default class Calculator {
     this.bindFunctions();
   }
 
-  show(number) {
-    switch (number) {
-      default:
-        this.addNumberDisplay(number);
-    }
-  }
-
   addNumberDisplay(number) {
-    if (this.display.innerText.length < this.limit) {
-      this.display.innerText += number;
+    if (this.display.innerText === '0') {
+      this.number1 = number;
+      this.display.innerText = this.number1;
+    } else if (this.operation === '' && this.number1.length < this.limit) {
+      this.number1 += number;
+      this.display.innerText = this.number1;
+    } else if (this.operation !== '' && this.number2.length < this.limit) {
+      this.number2 += number;
+      this.display.innerText = this.number2;
+    } else {
+      this.number1 = number;
+      this.display.innerText = this.number1;
     }
   }
 
   handleNumberClick(event) {
     event.preventDefault();
-    this.show(event.target.innerText);
+    this.addNumberDisplay(event.target.innerText);
   }
 
   addNumbersEvents() {
@@ -48,32 +56,74 @@ export default class Calculator {
     this.numbers.forEach((number) => number.addEventListener('mouseup', this.handleMouseup));
   }
 
-  handleDivision({ target }) {
-
+  handleDivision() {
+    if (this.operation === '') {
+      this.operation = '/';
+    } else {
+      const result = Number(this.number1) / Number(this.number2);
+      this.handleAllClear();
+      this.addNumberDisplay(result);
+    }
   }
 
-  handleMultiplication({ target }) {
-
+  handleMultiplication() {
+    if (this.operation === '') {
+      this.operation = '*';
+    } else {
+      const result = Number(this.number1) * Number(this.number2);
+      this.handleAllClear();
+      this.addNumberDisplay(result);
+    }
   }
 
-  handleSubtraction({ target }) {
-
+  handleSubtraction() {
+    if (this.operation === '') {
+      this.operation = '-';
+    } else {
+      const result = Number(this.number1) - Number(this.number2);
+      this.handleAllClear();
+      this.addNumberDisplay(result);
+    }
   }
 
-  handleSum({ target }) {
-
+  handleSum() {
+    if (this.operation === '') {
+      this.operation = '+';
+    } else {
+      const result = Number(this.number1) + Number(this.number2);
+      this.handleAllClear();
+      this.addNumberDisplay(result);
+    }
   }
 
-  handleResult({ target }) {
-
+  handleResult() {
+    console.log(this.number1, this.operation, this.number2);
+    switch (this.operation) {
+      case '-':
+        this.handleSubtraction();
+        break;
+      case '*':
+        this.handleMultiplication();
+        break;
+      case '/':
+        this.handleDivision();
+        break;
+      default:
+        this.handleSum();
+        break;
+    }
   }
 
   handleClear({ target }) {
 
   }
 
-  handleAllClear({ target }) {
-    this.display.innerText = 0;
+  handleAllClear() {
+    this.display.innerText = '0';
+    this.operation = '';
+    this.number1 = '';
+    this.number2 = '';
+    this.ativado = 0;
   }
 
   handlePercentage({ target }) {
