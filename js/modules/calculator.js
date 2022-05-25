@@ -33,7 +33,6 @@ export default class Calculator {
 
   handleNumberClick(event) {
     event.preventDefault();
-    Calculator.clickEffect(event.target);
     this.show(event.target.innerText);
   }
 
@@ -41,51 +40,52 @@ export default class Calculator {
     this.numbers.forEach((number) => number.addEventListener('click', this.handleNumberClick));
   }
 
+  addNumbersMousedownEvents() {
+    this.numbers.forEach((number) => number.addEventListener('mousedown', this.handleMousedown));
+  }
+
+  addNumbersMouseupEvents() {
+    this.numbers.forEach((number) => number.addEventListener('mouseup', this.handleMouseup));
+  }
+
   handleDivision({ target }) {
-    Calculator.clickEffect(target);
-    console.log(this);
+
   }
 
   handleMultiplication({ target }) {
-    Calculator.clickEffect(target);
-    console.log(this);
+
   }
 
   handleSubtraction({ target }) {
-    Calculator.clickEffect(target);
-    console.log(this);
+
   }
 
   handleSum({ target }) {
-    Calculator.clickEffect(target);
-    console.log(this);
+
   }
 
   handleResult({ target }) {
-    Calculator.clickEffect(target);
-    console.log(this);
+
   }
 
   handleClear({ target }) {
-    Calculator.clickEffect(target);
-    console.log(this);
+
   }
 
   handleAllClear({ target }) {
-    Calculator.clickEffect(target);
     this.display.innerText = 0;
   }
 
   handlePercentage({ target }) {
-    Calculator.clickEffect(target);
-    console.log(this);
+
   }
 
-  static clickEffect(element) {
-    element.classList.add('brightness');
-    setTimeout(() => {
-      element.classList.remove('brightness');
-    }, 50);
+  handleMousedown({ target }) {
+    target.classList.add('brightness');
+  }
+
+  handleMouseup({ target }) {
+    target.classList.remove('brightness');
   }
 
   addOperationsEvents() {
@@ -97,6 +97,28 @@ export default class Calculator {
     this.btnClear.addEventListener('click', this.handleClear);
     this.btnAllClear.addEventListener('click', this.handleAllClear);
     this.btnPercentage.addEventListener('click', this.handlePercentage);
+  }
+
+  addMousedownEvent() {
+    this.btnDivision.addEventListener('mousedown', this.handleMousedown);
+    this.btnMultiplication.addEventListener('mousedown', this.handleMousedown);
+    this.btnSubtraction.addEventListener('mousedown', this.handleMousedown);
+    this.btnSum.addEventListener('mousedown', this.handleMousedown);
+    this.btnResult.addEventListener('mousedown', this.handleMousedown);
+    this.btnClear.addEventListener('mousedown', this.handleMousedown);
+    this.btnAllClear.addEventListener('mousedown', this.handleMousedown);
+    this.btnPercentage.addEventListener('mousedown', this.handleMousedown);
+  }
+
+  addMouseupEvent() {
+    this.btnDivision.addEventListener('mouseup', this.handleMouseup);
+    this.btnMultiplication.addEventListener('mouseup', this.handleMouseup);
+    this.btnSubtraction.addEventListener('mouseup', this.handleMouseup);
+    this.btnSum.addEventListener('mouseup', this.handleMouseup);
+    this.btnResult.addEventListener('mouseup', this.handleMouseup);
+    this.btnClear.addEventListener('mouseup', this.handleMouseup);
+    this.btnAllClear.addEventListener('mouseup', this.handleMouseup);
+    this.btnPercentage.addEventListener('mouseup', this.handleMouseup);
   }
 
   bindFunctions() {
@@ -114,6 +136,10 @@ export default class Calculator {
 
   init() {
     this.addNumbersEvents();
+    this.addNumbersMousedownEvents();
+    this.addNumbersMouseupEvents();
     this.addOperationsEvents();
+    this.addMousedownEvent();
+    this.addMouseupEvent();
   }
 }
