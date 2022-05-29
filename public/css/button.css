@@ -27,9 +27,9 @@
 }
 
 .calculator__button.operation {
-  background: #f3a33c;
+  background: var(--bg-op-btn);
 }
 
 .calculator__button.aux {
-  background: #585858;
+  background: var(--bg-aux-btn);
 }
