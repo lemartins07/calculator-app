@@ -1,0 +1,15 @@
+.calculator {
+  height:320px;
+  width: 235px; 
+  
+  font-size: 3rem;  
+  
+  border-radius: 5px;
+  border: 1px solid #747474;
+  
+  box-shadow: 2px 2px 2px rgba(0,0,0,.1);  
+  
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+  grid-template-rows: 1fr repeat(5, 48px);    
+}
