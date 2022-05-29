@@ -2,14 +2,14 @@ export default class Calculator {
   constructor(display, numbers, limit) {
     this.display = document.querySelector(display);
     this.numbers = document.querySelectorAll(numbers);
+    this.operations = document.querySelectorAll('.calculator__button.operation');
     this.limit = limit;
 
     this.display.innerText = '0';
-
-    this.operation = '';
-    this.number1 = '';
-    this.number2 = '';
-    this.ativado = 0;
+    this.operation = null;
+    this.clearDisplay = false;
+    this.values = [0, 0];
+    this.current = 0;
 
     this.btnDivision = document.querySelector('#btn-division');
     this.btnMultiplication = document.querySelector('#btn-multiplication');
@@ -21,6 +21,56 @@ export default class Calculator {
     this.btnPercentage = document.querySelector('#btn-percentage');
 
     this.bindFunctions();
+  }
+
+  setOperarion(op) {
+    const operation = op.target.innerText;
+
+    if (this.current === 0) {
+      this.operation = operation;
+      this.current = 1;
+      this.clearDisplay = true;
+    } else {
+      const equals = operation === '=';
+      this.handleResult(this.operation);
+
+      if (Number.isNaN(this.values[0]) || !Number.isFinite(this.values[0])) {
+        this.clearMemory();
+        return;
+      }
+
+      this.values[1] = 0;
+
+      this.display.innerText = this.values[0].toString();
+      this.operation = equals ? null : operation;
+      this.current = equals ? 0 : 1;
+      this.clearDisplay = !equals;
+    }
+  }
+
+  addDigit(n) {
+    const number = n.target.innerText;
+    let displayValue = this.display.innerText;
+
+    if (number === '.' && this.display.innerText.includes('.')) {
+      return null;
+    }
+
+    const clearDisplay = displayValue === '0' || this.clearDisplay;
+    const currentValue = clearDisplay ? '' : displayValue;
+    displayValue = currentValue + number;
+
+    this.display.innerText = displayValue;
+    this.clearDisplay = false;
+
+    if (number !== '.') {
+      const newValue = parseFloat(displayValue);
+      this.values[this.current] = newValue;
+    }
+
+    console.log(this.values);
+
+    return null;
   }
 
   addNumberDisplay(number) {
@@ -39,77 +89,28 @@ export default class Calculator {
     }
   }
 
-  handleNumberClick(event) {
-    event.preventDefault();
-    this.addNumberDisplay(event.target.innerText);
-  }
-
   addNumbersEvents() {
-    this.numbers.forEach((number) => number.addEventListener('click', this.handleNumberClick));
+    this.numbers.forEach((number) => number.addEventListener('click', this.addDigit));
   }
 
-  addNumbersMousedownEvents() {
-    this.numbers.forEach((number) => number.addEventListener('mousedown', this.handleMousedown));
-  }
-
-  addNumbersMouseupEvents() {
-    this.numbers.forEach((number) => number.addEventListener('mouseup', this.handleMouseup));
-  }
-
-  handleDivision() {
-    if (this.operation === '') {
-      this.operation = '/';
-    } else {
-      const result = Number(this.number1) / Number(this.number2);
-      this.handleAllClear();
-      this.addNumberDisplay(result);
-    }
-  }
-
-  handleMultiplication() {
-    if (this.operation === '') {
-      this.operation = '*';
-    } else {
-      const result = Number(this.number1) * Number(this.number2);
-      this.handleAllClear();
-      this.addNumberDisplay(result);
-    }
-  }
-
-  handleSubtraction() {
-    if (this.operation === '') {
-      this.operation = '-';
-    } else {
-      const result = Number(this.number1) - Number(this.number2);
-      this.handleAllClear();
-      this.addNumberDisplay(result);
-    }
-  }
-
-  handleSum() {
-    if (this.operation === '') {
-      this.operation = '+';
-    } else {
-      const result = Number(this.number1) + Number(this.number2);
-      this.handleAllClear();
-      this.addNumberDisplay(result);
-    }
+  addOperationsEvents() {
+    this.operations.forEach((op) => op.addEventListener('click', this.setOperarion));
   }
 
   handleResult() {
-    console.log(this.number1, this.operation, this.number2);
+    console.log(this.values[0], this.operation, this.values[1]);
     switch (this.operation) {
-      case '-':
-        this.handleSubtraction();
+      case '/':
+        this.values[0] /= this.values[1];
         break;
       case '*':
-        this.handleMultiplication();
+        this.values[0] *= this.values[1];
         break;
-      case '/':
-        this.handleDivision();
+      case '-':
+        this.values[0] -= this.values[1];
         break;
       default:
-        this.handleSum();
+        this.values[0] += this.values[1];
         break;
     }
   }
@@ -120,76 +121,44 @@ export default class Calculator {
 
   handleAllClear() {
     this.display.innerText = '0';
-    this.operation = '';
-    this.number1 = '';
-    this.number2 = '';
-    this.ativado = 0;
+    this.operation = null;
+    this.clearDisplay = false;
+    this.values = [0, 0];
+    this.current = 0;
   }
 
   handlePercentage({ target }) {
 
   }
 
-  handleMousedown({ target }) {
-    target.classList.add('brightness');
-  }
-
-  handleMouseup({ target }) {
-    target.classList.remove('brightness');
-  }
-
-  addOperationsEvents() {
-    this.btnDivision.addEventListener('click', this.handleDivision);
-    this.btnMultiplication.addEventListener('click', this.handleMultiplication);
-    this.btnSubtraction.addEventListener('click', this.handleSubtraction);
-    this.btnSum.addEventListener('click', this.handleSum);
-    this.btnResult.addEventListener('click', this.handleResult);
+  addAuxEvents() {
+    // this.btnDivision.addEventListener('click', this.handleDivision);
+    // this.btnMultiplication.addEventListener('click', this.handleMultiplication);
+    // this.btnSubtraction.addEventListener('click', this.handleSubtraction);
+    // this.btnSum.addEventListener('click', this.handleSum);
+    // this.btnResult.addEventListener('click', this.handleResult);
     this.btnClear.addEventListener('click', this.handleClear);
     this.btnAllClear.addEventListener('click', this.handleAllClear);
     this.btnPercentage.addEventListener('click', this.handlePercentage);
   }
 
-  addMousedownEvent() {
-    this.btnDivision.addEventListener('mousedown', this.handleMousedown);
-    this.btnMultiplication.addEventListener('mousedown', this.handleMousedown);
-    this.btnSubtraction.addEventListener('mousedown', this.handleMousedown);
-    this.btnSum.addEventListener('mousedown', this.handleMousedown);
-    this.btnResult.addEventListener('mousedown', this.handleMousedown);
-    this.btnClear.addEventListener('mousedown', this.handleMousedown);
-    this.btnAllClear.addEventListener('mousedown', this.handleMousedown);
-    this.btnPercentage.addEventListener('mousedown', this.handleMousedown);
-  }
-
-  addMouseupEvent() {
-    this.btnDivision.addEventListener('mouseup', this.handleMouseup);
-    this.btnMultiplication.addEventListener('mouseup', this.handleMouseup);
-    this.btnSubtraction.addEventListener('mouseup', this.handleMouseup);
-    this.btnSum.addEventListener('mouseup', this.handleMouseup);
-    this.btnResult.addEventListener('mouseup', this.handleMouseup);
-    this.btnClear.addEventListener('mouseup', this.handleMouseup);
-    this.btnAllClear.addEventListener('mouseup', this.handleMouseup);
-    this.btnPercentage.addEventListener('mouseup', this.handleMouseup);
-  }
-
   bindFunctions() {
-    this.handleDivision = this.handleDivision.bind(this);
-    this.handleMultiplication = this.handleMultiplication.bind(this);
-    this.handleSubtraction = this.handleSubtraction.bind(this);
-    this.handleSum = this.handleSum.bind(this);
+    // this.handleDivision = this.handleDivision.bind(this);
+    // this.handleMultiplication = this.handleMultiplication.bind(this);
+    // this.handleSubtraction = this.handleSubtraction.bind(this);
+    // this.handleSum = this.handleSum.bind(this);
     this.handleResult = this.handleResult.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleAllClear = this.handleAllClear.bind(this);
     this.handlePercentage = this.handlePercentage.bind(this);
-
-    this.handleNumberClick = this.handleNumberClick.bind(this);
+    this.setOperarion = this.setOperarion.bind(this);
+    this.addDigit = this.addDigit.bind(this);
   }
 
   init() {
     this.addNumbersEvents();
-    this.addNumbersMousedownEvents();
-    this.addNumbersMouseupEvents();
     this.addOperationsEvents();
-    this.addMousedownEvent();
-    this.addMouseupEvent();
+    this.addOperationsEvents();
+    this.addAuxEvents();
   }
 }
