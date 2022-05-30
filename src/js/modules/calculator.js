@@ -110,10 +110,10 @@ export default class Calculator {
       }
 
       if (right.length > decimalPlaces) {
-        return n.toFixed(decimalPlaces);
+        return Number(n.toFixed(decimalPlaces));
       }
 
-      return n.toFixed(right.length);
+      return Number(n.toFixed(right.length));
     }
 
     return n;
