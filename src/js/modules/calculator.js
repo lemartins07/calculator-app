@@ -29,8 +29,8 @@ export default class Calculator {
       const equals = operation === '=';
       this.handleResult(this.operation);
 
-      if (Number.isNaN(this.values[0]) || !Number.isFinite(this.values[0])) {
-        this.clearMemory();
+      if (Number.isNaN(this.values[0])) {
+        this.handleAllClear();
         return;
       }
 
@@ -53,7 +53,10 @@ export default class Calculator {
 
     const clearDisplay = displayValue === '0' || this.clearDisplay;
     const currentValue = clearDisplay ? '' : displayValue;
-    displayValue = currentValue + number;
+
+    displayValue = (currentValue + number).length <= this.limit
+      ? currentValue + number
+      : currentValue;
 
     this.display.innerText = displayValue;
     this.clearDisplay = false;
@@ -83,18 +86,32 @@ export default class Calculator {
   handleResult() {
     switch (this.operation) {
       case '/':
-        this.values[0] /= this.values[1];
+        this.values[0] = this.resultFormat(this.values[0] / this.values[1]);
         break;
       case '*':
-        this.values[0] *= this.values[1];
+        this.values[0] = this.resultFormat(this.values[0] * this.values[1]);
         break;
       case '-':
-        this.values[0] -= this.values[1];
+        this.values[0] = this.resultFormat(this.values[0] - this.values[1]);
         break;
       default:
-        this.values[0] += this.values[1];
+        this.values[0] = this.resultFormat(this.values[0] + this.values[1]);
         break;
     }
+  }
+
+  resultFormat(n) {
+    const a = String(n).split('.');
+
+    const decimalPlaces = this.limit - a[0].length;
+
+    if (decimalPlaces <= 0) {
+      return Math.round(n);
+    } if (decimalPlaces > 6) {
+      return n.toFixed(6);
+    }
+
+    return n.toFixed(decimalPlaces);
   }
 
   handleClear() {
@@ -120,7 +137,7 @@ export default class Calculator {
     this.handleResult = this.handleResult.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleAllClear = this.handleAllClear.bind(this);
-    this.handlePercentage = this.handlePercentage.bind(this);
+    // this.handlePercentage = this.handlePercentage.bind(this);
     this.setOperarion = this.setOperarion.bind(this);
     this.addDigit = this.addDigit.bind(this);
   }
