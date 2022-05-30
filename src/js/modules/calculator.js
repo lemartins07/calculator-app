@@ -68,8 +68,6 @@ export default class Calculator {
       this.values[this.current] = newValue;
     }
 
-    console.log(this.values);
-
     return null;
   }
 
