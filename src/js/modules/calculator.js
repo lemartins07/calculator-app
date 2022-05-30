@@ -11,11 +11,6 @@ export default class Calculator {
     this.values = [0, 0];
     this.current = 0;
 
-    this.btnDivision = document.querySelector('#btn-division');
-    this.btnMultiplication = document.querySelector('#btn-multiplication');
-    this.btnSubtraction = document.querySelector('#btn-subtraction');
-    this.btnSum = document.querySelector('#btn-sum');
-    this.btnResult = document.querySelector('#btn-result');
     this.btnClear = document.querySelector('#btn-clear');
     this.btnAllClear = document.querySelector('#btn-all-clear');
     this.btnPercentage = document.querySelector('#btn-percentage');
@@ -71,22 +66,6 @@ export default class Calculator {
     return null;
   }
 
-  addNumberDisplay(number) {
-    if (this.display.innerText === '0') {
-      this.number1 = number;
-      this.display.innerText = this.number1;
-    } else if (this.operation === '' && this.number1.length < this.limit) {
-      this.number1 += number;
-      this.display.innerText = this.number1;
-    } else if (this.operation !== '' && this.number2.length < this.limit) {
-      this.number2 += number;
-      this.display.innerText = this.number2;
-    } else {
-      this.number1 = number;
-      this.display.innerText = this.number1;
-    }
-  }
-
   addNumbersEvents() {
     this.numbers.forEach((number) => number.addEventListener('click', this.addDigit));
   }
@@ -95,8 +74,13 @@ export default class Calculator {
     this.operations.forEach((op) => op.addEventListener('click', this.setOperarion));
   }
 
+  addAuxEvents() {
+    this.btnClear.addEventListener('click', this.handleClear);
+    this.btnAllClear.addEventListener('click', this.handleAllClear);
+    this.btnPercentage.addEventListener('click', this.handlePercentage);
+  }
+
   handleResult() {
-    console.log(this.values[0], this.operation, this.values[1]);
     switch (this.operation) {
       case '/':
         this.values[0] /= this.values[1];
@@ -113,8 +97,12 @@ export default class Calculator {
     }
   }
 
-  handleClear({ target }) {
-
+  handleClear() {
+    this.display.innerText = '0';
+    this.operation = null;
+    this.clearDisplay = false;
+    this.values = [0, 0];
+    this.current = 0;
   }
 
   handleAllClear() {
@@ -125,26 +113,10 @@ export default class Calculator {
     this.current = 0;
   }
 
-  handlePercentage({ target }) {
-
-  }
-
-  addAuxEvents() {
-    // this.btnDivision.addEventListener('click', this.handleDivision);
-    // this.btnMultiplication.addEventListener('click', this.handleMultiplication);
-    // this.btnSubtraction.addEventListener('click', this.handleSubtraction);
-    // this.btnSum.addEventListener('click', this.handleSum);
-    // this.btnResult.addEventListener('click', this.handleResult);
-    this.btnClear.addEventListener('click', this.handleClear);
-    this.btnAllClear.addEventListener('click', this.handleAllClear);
-    this.btnPercentage.addEventListener('click', this.handlePercentage);
-  }
+  // handlePercentage() {
+  // }
 
   bindFunctions() {
-    // this.handleDivision = this.handleDivision.bind(this);
-    // this.handleMultiplication = this.handleMultiplication.bind(this);
-    // this.handleSubtraction = this.handleSubtraction.bind(this);
-    // this.handleSum = this.handleSum.bind(this);
     this.handleResult = this.handleResult.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleAllClear = this.handleAllClear.bind(this);
