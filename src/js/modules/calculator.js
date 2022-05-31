@@ -29,7 +29,7 @@ export default class Calculator {
       const equals = operation === '=';
       this.handleResult(this.operation);
 
-      if (Number.isNaN(this.values[0])) {
+      if (Number.isNaN(this.values[0]) || !Number.isFinite(this.values[0])) {
         this.handleAllClear();
         return;
       }
@@ -101,17 +101,22 @@ export default class Calculator {
   }
 
   resultFormat(n) {
-    const a = String(n).split('.');
+    if (String(n).includes('.')) {
+      const [left, right] = String(n).split('.');
+      const decimalPlaces = this.limit - left.length - 1;
 
-    const decimalPlaces = this.limit - a[0].length;
+      if (decimalPlaces >= this.limit || decimalPlaces === 0) {
+        return Math.round(n);
+      }
 
-    if (decimalPlaces <= 0) {
-      return Math.round(n);
-    } if (decimalPlaces > 6) {
-      return n.toFixed(6);
+      if (right.length > decimalPlaces) {
+        return Number(n.toFixed(decimalPlaces));
+      }
+
+      return Number(n.toFixed(right.length));
     }
 
-    return n.toFixed(decimalPlaces);
+    return n;
   }
 
   handleClear() {
